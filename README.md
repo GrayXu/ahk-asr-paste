@@ -11,37 +11,23 @@ I have to update this section to match the current fork...
 
 - Download and install AutoHotkey v2 from [autohotkey.com](https://www.autohotkey.com/)
 - TBD
-- Copy `config.template.json` to your own `config.json`, and fill in the API settings you want to use.
+- Copy `config.template.json` to your own `config.json`, and fill in the ASR settings you want to use.
 - Optionally set `autoHotKeyExec` if your AutoHotkey v2 executable is not already available on `PATH`.
 
 ```json
 {
-  "api": {
-    "apiKey": "",
-    "baseURL": "",
-    "model": ""
-  },
   "asr": {
     "apiKey": "",
     "baseURL": "",
     "model": "whisper-1"
   },
-  "command": {
-    "apiKey": "",
-    "baseURL": "",
-    "model": "gpt-4"
-  },
   "transcriptionPrompt": "",
-  "openapiKey": "",
-  "autoHotKeyExec": "",
-  "coding": false
+  "autoHotKeyExec": ""
 }
 ```
 
-- `api` is the shared default for `apiKey`, `baseURL`, and `model`.
-- `asr` and `command` override `api` field-by-field.
+- `asr.model` is the speech-to-text model used for transcription.
 - `transcriptionPrompt` controls the default ASR prompt. Leave it empty to use the built-in default prompt.
-- `openapiKey` is only kept for backward compatibility with old configs.
 - Leave `baseURL` empty to use the SDK's default OpenAI endpoint.
 
 ## Usage
@@ -63,7 +49,6 @@ F8::
 ## Customise
 
 - Set `transcriptionPrompt` in `config.json` to customize the default transcription prompt.
-- You can still pass a prompt file manually when running the executable directly.
 
 ## Prior Art
 

@@ -1,21 +1,9 @@
 {
-  "api": {
-    "apiKey": "",
-    "baseURL": "",
-    "model": ""
-  },
   "asr": {
     "apiKey": "",
     "baseURL": "",
     "model": "whisper-1"
   },
-  "command": {
-    "apiKey": "",
-    "baseURL": "",
-    "model": "gpt-4"
-  },
   "transcriptionPrompt": "",
-  "openapiKey": "",
-  "autoHotKeyExec": "",
-  "coding": false
+  "autoHotKeyExec": ""
 }

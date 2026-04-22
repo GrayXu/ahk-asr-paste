@@ -8,8 +8,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"strings"
-	"unicode"
 	"unicode/utf16"
 )
 
@@ -56,102 +54,6 @@ func utf16leEncode(s string) []byte {
 	return b
 }
 
-func toSnakeCase(text string) string {
-	// Replace spaces with underscores and convert to lowercase
-	return strings.ToLower(strings.ReplaceAll(text, " ", "_"))
-}
-
-func toCamelCase(text string) string {
-	var result string
-	capitalizeNext := false
-
-	for _, r := range text {
-		if r == ' ' || r == '_' {
-			capitalizeNext = true
-			continue
-		}
-		if capitalizeNext {
-			result += strings.ToUpper(string(r))
-			capitalizeNext = false
-		} else {
-			// result += strings.ToLower(string(r))
-			result += string(r)
-		}
-	}
-
-	return result
-}
-
-func toPascalCase(text string) string {
-	if text == "" {
-		return ""
-	}
-
-	camelCase := toCamelCase(text)
-	// Capitalize the first letter and attach the rest of the string
-	return strings.ToUpper(string(camelCase[0])) + camelCase[1:]
-}
-
-// truncatePrefix removes a case-insensitive prefix from 's' and trims any surrounding whitespaces and punctuation.
-// If 's' doesn't start with 'prefix', it returns 's' unchanged.
-func truncatePrefix(s, prefix string) string {
-	lowerS := strings.ToLower(s)
-	lowerPrefix := strings.ToLower(prefix)
-
-	if strings.HasPrefix(lowerS, lowerPrefix) {
-		// Calculate the length of the original prefix in the string
-		prefixLength := len(prefix)
-
-		// Remove the prefix
-		trimmedString := s[prefixLength:]
-
-		// Trim whitespaces and punctuation
-		return strings.TrimFunc(trimmedString, func(r rune) bool {
-			return unicode.IsSpace(r) || unicode.IsPunct(r)
-		})
-	}
-	return s
-}
-
-/*
-{
-	lowerS := strings.ToLower(s)
-	lowerPrefix := strings.ToLower(prefix)
-
-	if strings.HasPrefix(lowerS, lowerPrefix) {
-		// Calculate the length of the original prefix in the string
-		prefixLength := len(prefix)
-		// Remove the prefix and trim whitespaces
-		return strings.TrimSpace(s[prefixLength:])
-	}
-	return s
-}
-*/
-
-// parses the text to identify commands and applies the commands to the text
-func applyCommands(text string) string {
-	textPlus := text + "                    "
-	casing := strings.ToLower(strings.ReplaceAll(textPlus[0:10], " ", ""))
-	log.Println("Casing?:\n  " + casing)
-	if casing == "snakecase" {
-		text = truncatePrefix(text, "snake")
-		text = truncatePrefix(text, "case")
-		text = toSnakeCase(text)
-	} else if casing == "camelcase" {
-		text = truncatePrefix(text, "camel")
-		text = truncatePrefix(text, "case")
-		text = toCamelCase(text)
-	} else {
-		casing = strings.ToLower(strings.ReplaceAll(textPlus[0:11], " ", ""))
-		if casing == "pascalcase" {
-			text = truncatePrefix(text, "pascal")
-			text = truncatePrefix(text, "case")
-			text = toPascalCase(text)
-		}
-	}
-	return text
-}
-
 func main() {
 
 	// Open a file for logging
@@ -185,20 +87,11 @@ func main() {
 
 	// print config to log
 	asrSettings := config.ResolveASRSettings()
-	commandSettings := config.ResolveCommandSettings()
 	log.Println("Config:")
-	log.Println("  Legacy OpenapiKey configured: " + fmt.Sprintf("%t", strings.TrimSpace(config.OpenapiKey) != ""))
-	log.Println("  API default key configured: " + fmt.Sprintf("%t", strings.TrimSpace(config.API.APIKey) != ""))
-	log.Println("  API default baseURL: " + config.API.BaseURL)
-	log.Println("  API default model: " + config.API.Model)
 	log.Println("  ASR effective key configured: " + fmt.Sprintf("%t", asrSettings.APIKey != ""))
 	log.Println("  ASR effective baseURL: " + asrSettings.BaseURL)
 	log.Println("  ASR effective model: " + asrSettings.Model)
-	log.Println("  Command effective key configured: " + fmt.Sprintf("%t", commandSettings.APIKey != ""))
-	log.Println("  Command effective baseURL: " + commandSettings.BaseURL)
-	log.Println("  Command effective model: " + commandSettings.Model)
 	log.Println("  AutoHotKeyExec: " + config.AutoHotKeyExec)
-	log.Println("  Coding: " + fmt.Sprintf("%t", config.Coding))
 
 	// argLength := len(os.Args[1:])
 	inputFileName := "rec.mp3"
@@ -221,10 +114,6 @@ func main() {
 		return
 	}
 	log.Println("Transcription:\n" + text)
-	if config.Coding {
-		text = applyCommands(text)
-		log.Println("Code:\n  " + text)
-	}
 
 	log.Println("Ready to paste:\n" + text)
 	err = writeTextToClipboard(text)
@@ -244,22 +133,6 @@ ExitApp()
 	if err != nil {
 		log.Fatal("Cannot run AutoHotKey command", err)
 	}
-
-	/*
-		log.Println("Prompt:\n  " + text)
-		command, err := BuildCommand(config, text)
-		if err != nil {
-			log.Fatal("Cannot interpret prompt", err)
-			return
-		}
-
-		fmt.Println("Running:\n  " + command)
-		output, err := RunCommand(config, command)
-		if err != nil {
-			log.Fatal("Cannot run command", err)
-		}
-		log.Println("Output:\n  " + output)
-	*/
 }
 
 func readConfigFile() ([]byte, error) {
