@@ -1,2 +1,2 @@
-Send, ^v ; Ctrl+V for paste
-return
+#Requires AutoHotkey v2.0
+Send("^v")

@@ -13,12 +13,6 @@ import (
 	"unicode/utf16"
 )
 
-type Config struct {
-	OpenapiKey     string
-	AutoHotKeyExec string
-	Coding         bool
-}
-
 func writeTextToClipboard(text string) error {
 	// Create a temporary file
 	tmpFile, err := ioutil.TempFile("", "clip")
@@ -190,14 +184,21 @@ func main() {
 	}
 
 	// print config to log
+	asrSettings := config.ResolveASRSettings()
+	commandSettings := config.ResolveCommandSettings()
 	log.Println("Config:")
-	log.Println("  OpenapiKey: " + "**************************") //config.OpenapiKey)
+	log.Println("  Legacy OpenapiKey configured: " + fmt.Sprintf("%t", strings.TrimSpace(config.OpenapiKey) != ""))
+	log.Println("  API default key configured: " + fmt.Sprintf("%t", strings.TrimSpace(config.API.APIKey) != ""))
+	log.Println("  API default baseURL: " + config.API.BaseURL)
+	log.Println("  API default model: " + config.API.Model)
+	log.Println("  ASR effective key configured: " + fmt.Sprintf("%t", asrSettings.APIKey != ""))
+	log.Println("  ASR effective baseURL: " + asrSettings.BaseURL)
+	log.Println("  ASR effective model: " + asrSettings.Model)
+	log.Println("  Command effective key configured: " + fmt.Sprintf("%t", commandSettings.APIKey != ""))
+	log.Println("  Command effective baseURL: " + commandSettings.BaseURL)
+	log.Println("  Command effective model: " + commandSettings.Model)
 	log.Println("  AutoHotKeyExec: " + config.AutoHotKeyExec)
 	log.Println("  Coding: " + fmt.Sprintf("%t", config.Coding))
-
-	if config.OpenapiKey == "" {
-		log.Fatal("Please provide your OpenAI key in the file config.json")
-	}
 
 	// argLength := len(os.Args[1:])
 	inputFileName := "rec.mp3"
@@ -233,8 +234,9 @@ func main() {
 
 	log.Println("Text copied to clipboard")
 
-	ahkScript := `Send, ^v ; Ctrl+V for paste
-ExitApp ; Exit after executing
+	ahkScript := `#Requires AutoHotkey v2.0
+Send("^v")
+ExitApp()
 `
 
 	// Assuming you have AutoHotKey installed and `paste.ahk` is in the same directory.

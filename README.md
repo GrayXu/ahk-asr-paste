@@ -9,16 +9,38 @@ This project allows you dictating anywhere in Windows using OpenAI's Whisper spe
 
 I have to update this section to match the current fork...
 
-- Download and install AutoHotKey V1 from [autohotkey.com](https://www.autohotkey.com/)
+- Download and install AutoHotkey v2 from [autohotkey.com](https://www.autohotkey.com/)
 - TBD
-- Copy `config.template.json` to your own `config.json`, and edit it to provide your [Open API Key](https://www.howtogeek.com/885918/how-to-get-an-openai-api-key/) for the property `OpenapiKey`.
+- Copy `config.template.json` to your own `config.json`, and fill in the API settings you want to use.
+- Optionally set `autoHotKeyExec` if your AutoHotkey v2 executable is not already available on `PATH`.
 
 ```json
 {
-  "OpenapiKey": "",
-  "AutoHotKeyExec": ".\\bin\\autohotkey-1.1.37.01\\AutoHotkeyU64.exe"
+  "api": {
+    "apiKey": "",
+    "baseURL": "",
+    "model": ""
+  },
+  "asr": {
+    "apiKey": "",
+    "baseURL": "",
+    "model": "whisper-1"
+  },
+  "command": {
+    "apiKey": "",
+    "baseURL": "",
+    "model": "gpt-4"
+  },
+  "openapiKey": "",
+  "autoHotKeyExec": "",
+  "coding": false
 }
 ```
+
+- `api` is the shared default for `apiKey`, `baseURL`, and `model`.
+- `asr` and `command` override `api` field-by-field.
+- `openapiKey` is only kept for backward compatibility with old configs.
+- Leave `baseURL` empty to use the SDK's default OpenAI endpoint.
 
 ## Usage
 
@@ -26,7 +48,7 @@ I have to update this section to match the current fork...
 - Press F8
 - Say whatever you want to type
 - Press F8
-- Wait for Open AI and AutoHotKey to do their magic
+- Wait for OpenAI and AutoHotkey v2 to do their magic
 
 ### Trigger Hotkey
 
@@ -38,7 +60,7 @@ F8::
 
 ## Customise
 
-- Edit transcriptionPrompt.txt to customize the transcription.
+- Edit `transcriptionPrompt.txt` to customize the transcription.
 - Add multiple transcription prompt and .ahk files. For example, you can have multiple Trigger Hotkeys for different languages or contexts.
 
 ## Prior Art

@@ -1,5 +1,20 @@
 {
-  "OpenapiKey": "",
-  "AutoHotKeyExec": ".\\bin\\autohotkey-1.1.37.01\\AutoHotkeyU64.exe",
-  "Coding": false
+  "api": {
+    "apiKey": "",
+    "baseURL": "",
+    "model": ""
+  },
+  "asr": {
+    "apiKey": "",
+    "baseURL": "",
+    "model": "whisper-1"
+  },
+  "command": {
+    "apiKey": "",
+    "baseURL": "",
+    "model": "gpt-4"
+  },
+  "openapiKey": "",
+  "autoHotKeyExec": "",
+  "coding": false
 }
