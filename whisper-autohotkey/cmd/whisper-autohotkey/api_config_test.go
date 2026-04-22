@@ -89,3 +89,25 @@ func TestResolvedAPISettingsValidateRequiresAPIKey(t *testing.T) {
 		t.Fatal("expected validation error when api key is empty")
 	}
 }
+
+func TestResolveTranscriptionPromptUsesConfiguredValue(t *testing.T) {
+	config := Config{
+		TranscriptionPrompt: "custom prompt",
+	}
+
+	prompt := config.ResolveTranscriptionPrompt()
+
+	if prompt != "custom prompt" {
+		t.Fatalf("expected configured prompt, got %q", prompt)
+	}
+}
+
+func TestResolveTranscriptionPromptFallsBackToDefault(t *testing.T) {
+	config := Config{}
+
+	prompt := config.ResolveTranscriptionPrompt()
+
+	if prompt != defaultTranscriptionPrompt {
+		t.Fatalf("expected default prompt %q, got %q", defaultTranscriptionPrompt, prompt)
+	}
+}

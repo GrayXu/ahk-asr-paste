@@ -7,9 +7,6 @@ F8:: {
 
     fmediaPath := A_WorkingDir "\bin\fmedia-1.31-windows-x64\fmedia\fmedia.exe"
     whisperPath := A_WorkingDir "\bin\whisper-autohotkey\whisper-autohotkey.exe"
-    promptFilePath := FileExist(A_WorkingDir "\transcriptionPrompt.txt")
-        ? "transcriptionPrompt.txt"
-        : (FileExist(A_WorkingDir "\transtriptionPrompt.txt") ? "transtriptionPrompt.txt" : "transcriptionPrompt.txt")
 
     notRecording := !notRecording
     if notRecording {
@@ -17,6 +14,6 @@ F8:: {
     } else {
         Run(Chr(34) . fmediaPath . Chr(34) . " --globcmd=stop", , "Hide")
         Sleep(200)
-        Run(Chr(34) . whisperPath . Chr(34) . " en " . Chr(34) . promptFilePath . Chr(34), , "Hide")
+        Run(Chr(34) . whisperPath . Chr(34) . " zh", , "Hide")
     }
 }

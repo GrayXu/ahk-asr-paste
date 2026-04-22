@@ -14,12 +14,13 @@ type APISettings struct {
 }
 
 type Config struct {
-	API            APISettings `json:"api"`
-	ASR            APISettings `json:"asr"`
-	Command        APISettings `json:"command"`
-	OpenapiKey     string      `json:"openapiKey"`
-	AutoHotKeyExec string      `json:"autoHotKeyExec"`
-	Coding         bool        `json:"coding"`
+	API                 APISettings `json:"api"`
+	ASR                 APISettings `json:"asr"`
+	Command             APISettings `json:"command"`
+	TranscriptionPrompt string      `json:"transcriptionPrompt"`
+	OpenapiKey          string      `json:"openapiKey"`
+	AutoHotKeyExec      string      `json:"autoHotKeyExec"`
+	Coding              bool        `json:"coding"`
 }
 
 type ResolvedAPISettings struct {
@@ -29,8 +30,9 @@ type ResolvedAPISettings struct {
 }
 
 const (
-	defaultASRModel     = openai.Whisper1
-	defaultCommandModel = openai.GPT4
+	defaultASRModel            = openai.Whisper1
+	defaultCommandModel        = openai.GPT4
+	defaultTranscriptionPrompt = "这是中文转写，主要内容是中文口述、日常输入，以及编程和软件开发相关内容。"
 )
 
 func (config Config) ResolveASRSettings() ResolvedAPISettings {
@@ -39,6 +41,10 @@ func (config Config) ResolveASRSettings() ResolvedAPISettings {
 
 func (config Config) ResolveCommandSettings() ResolvedAPISettings {
 	return config.resolveAPISettings(config.Command, defaultCommandModel)
+}
+
+func (config Config) ResolveTranscriptionPrompt() string {
+	return firstNonEmpty(config.TranscriptionPrompt, defaultTranscriptionPrompt)
 }
 
 func (config Config) resolveAPISettings(override APISettings, defaultModel string) ResolvedAPISettings {

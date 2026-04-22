@@ -31,6 +31,7 @@ I have to update this section to match the current fork...
     "baseURL": "",
     "model": "gpt-4"
   },
+  "transcriptionPrompt": "",
   "openapiKey": "",
   "autoHotKeyExec": "",
   "coding": false
@@ -39,6 +40,7 @@ I have to update this section to match the current fork...
 
 - `api` is the shared default for `apiKey`, `baseURL`, and `model`.
 - `asr` and `command` override `api` field-by-field.
+- `transcriptionPrompt` controls the default ASR prompt. Leave it empty to use the built-in default prompt.
 - `openapiKey` is only kept for backward compatibility with old configs.
 - Leave `baseURL` empty to use the SDK's default OpenAI endpoint.
 
@@ -60,8 +62,8 @@ F8::
 
 ## Customise
 
-- Edit `transcriptionPrompt.txt` to customize the transcription.
-- Add multiple transcription prompt and .ahk files. For example, you can have multiple Trigger Hotkeys for different languages or contexts.
+- Set `transcriptionPrompt` in `config.json` to customize the default transcription prompt.
+- You can still pass a prompt file manually when running the executable directly.
 
 ## Prior Art
 

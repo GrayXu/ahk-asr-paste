@@ -32,6 +32,6 @@ F8:: {
     } else {
         Run(Chr(34) . fmediaPath . Chr(34) . " --globcmd=stop", , "Hide")
         Sleep(100)
-        Run(Chr(34) . whisperPath . Chr(34), , "Hide")
+        Run(Chr(34) . whisperPath . Chr(34) . " zh", , "Hide")
     }
 }
